@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Reqres_API_TestSuite">
+    <test name="API Tests">
+        <classes>
+            <class name="AuthTests"/>
+            <class name="UserTests"/>
+            <class name="NegativeTests"/>
+            <class name="PerformanceTests"/>
+        </classes>
+    </test>
+</suite>
