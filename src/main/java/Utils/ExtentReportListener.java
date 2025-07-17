@@ -5,7 +5,6 @@ import com.aventstack.extentreports.ExtentTest;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
 import java.io.IOException;
 
 public class ExtentReportListener implements ITestListener {
@@ -21,6 +20,10 @@ public class ExtentReportListener implements ITestListener {
     }
 
     private static final ThreadLocal<ExtentTest> test = new ThreadLocal<>();
+
+    public static ExtentTest getTest() {
+        return test.get();
+    }
 
     public void onTestStart(ITestResult result) {
         ExtentTest extentTest = extentReports.createTest(result.getMethod().getMethodName());
@@ -49,5 +52,4 @@ public class ExtentReportListener implements ITestListener {
     public void onFinish(ITestContext context) {
         extentReports.flush();
     }
-
 }

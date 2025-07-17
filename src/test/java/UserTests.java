@@ -1,9 +1,7 @@
 import Core.BaseTest;
 import Pojo.UserRequestData;
 import Pojo.UserResponseData;
-import Utils.DataProviders;
-import Utils.RetryAnalyzer;
-import Utils.Routes;
+import Utils.*;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import Enum.StatusCode;
@@ -71,7 +69,7 @@ public class UserTests extends BaseTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to update a user")
-    public void testUpdateUser(){
+    public void testUpdateUser() {
         UserRequestData user = new UserRequestData();
         user.setName("morpheus");
         user.setJob("Developer");

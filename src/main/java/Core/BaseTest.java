@@ -1,5 +1,6 @@
 package Core;
 
+import Utils.LoggingFilter;
 import Utils.PropertyReader;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
@@ -18,6 +19,7 @@ public class BaseTest {
         requestSpecification =
                 RestAssured
                         .given()
+                        .filter(new LoggingFilter())
                         .baseUri(PropertyReader.readProperty("serverAddress"))
                         .header("x-api-key", "reqres-free-v1")
                         .header("Content-Type", "application/json");
