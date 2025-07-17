@@ -24,9 +24,4 @@ public class BaseTest {
 
         softAssert = new SoftAssert();
     }
-
-    @AfterMethod
-    public void setSoftAssert(){
-        softAssert.assertAll();
-    }
 }

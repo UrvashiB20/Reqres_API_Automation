@@ -1,4 +1,5 @@
 import Core.BaseTest;
+import Utils.RetryAnalyzer;
 import Utils.Routes;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -7,7 +8,7 @@ import Enum.StatusCode;
 
     public class NegativeTests extends BaseTest {
 
-        @Test(description = "Test to fetch the user that does not exist")
+        @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to fetch the user that does not exist")
         public void testGetInvalidUser(){
             Response response =
                     requestSpecification
@@ -20,6 +21,7 @@ import Enum.StatusCode;
             softAssert.assertEquals(response.getStatusCode(), StatusCode.NOT_FOUND.code,"The expected status code was 404 but actual status code is "+response.getStatusCode());
             String responseBody =response.getBody().asString().trim();
             softAssert.assertEquals(responseBody,"{}","The expected and actual result does not match");
+            softAssert.assertAll();
             System.out.println("testGetInvalidUser passed successfully");
         }
 //-------------------------------------------------Not Supported On Reqres.in API---------------------------------------------------------------

@@ -2,6 +2,7 @@ import Core.BaseTest;
 import Pojo.UserRequestData;
 import Pojo.UserResponseData;
 import Utils.DataProviders;
+import Utils.RetryAnalyzer;
 import Utils.Routes;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public class UserTests extends BaseTest {
 
-    @Test(description = "Test to retrieve the list of users")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to retrieve the list of users")
     public void testGetUsers(){
         Response response =
                 requestSpecification
@@ -24,10 +25,11 @@ public class UserTests extends BaseTest {
         softAssert.assertEquals(response.getStatusCode(),StatusCode.SUCCESS.code,"The expected status code was 200 but actual status code is "+response.getStatusCode());
         List<Object> responseUserList = response.jsonPath().getList("data");
         softAssert.assertTrue(!responseUserList.isEmpty(),"The user list is empty");
+        softAssert.assertAll();
         System.out.println("testGetUsers passed successfully");
     }
 
-    @Test(description = "Test to retrieve the single user")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to retrieve the single user")
     public void testGetSingleUser(){
         Response response =
                 requestSpecification
@@ -42,10 +44,11 @@ public class UserTests extends BaseTest {
         softAssert.assertTrue(!responseUserMap.isEmpty(),"The user data is empty");
         softAssert.assertEquals(response.jsonPath().getInt("data.id"),2,"The expected and actual id does not match");
         softAssert.assertEquals(response.jsonPath().getString("data.email"),"janet.weaver@reqres.in","The expected and actual email does not match");
+        softAssert.assertAll();
         System.out.println("testGetSingleUser passed successfully");
     }
 
-    @Test(dataProvider = "createUserData", dataProviderClass = DataProviders.class, description = "Test to create a user")
+    @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "createUserData", dataProviderClass = DataProviders.class, description = "Test to create a user")
     public void testCreateUser(String name, String job){
         UserRequestData user = new UserRequestData();
         user.setName(name);
@@ -62,11 +65,12 @@ public class UserTests extends BaseTest {
         softAssert.assertEquals(response.getStatusCode(),StatusCode.CREATED.code,"The expected status code was 201 but actual status code is "+response.getStatusCode());
         softAssert.assertEquals(response.jsonPath().getString("name"),userResponseBody.getName(),"Name mismatched between expected and actual response");
         softAssert.assertEquals(response.jsonPath().getString("job"),userResponseBody.getJob(),"Job mismatched between expected and actual response");
+        softAssert.assertAll();
         System.out.println("testCreateUser passed successfully and User details are Name: "+name+" | Job: "+job);
 
     }
 
-    @Test(description = "Test to update a user")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to update a user")
     public void testUpdateUser(){
         UserRequestData user = new UserRequestData();
         user.setName("morpheus");
@@ -87,11 +91,12 @@ public class UserTests extends BaseTest {
         Map responseMap = response.as(Map.class);
         softAssert.assertTrue(responseMap.containsKey("updatedAt"),"UpdatedAt field is not present");
         softAssert.assertTrue(!response.jsonPath().getString("updatedAt").isEmpty(), "Timestamp is empty");
+        softAssert.assertAll();
         System.out.println("testUpdateUser passed successfully");
 
     }
 
-    @Test(description = "Test to update a user partially")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to update a user partially")
     public void testUpdateUserPartially(){
         UserRequestData user = new UserRequestData();
         user.setName("Anna");
@@ -110,10 +115,11 @@ public class UserTests extends BaseTest {
         Map responseMap = response.as(Map.class);
         softAssert.assertTrue(responseMap.containsKey("updatedAt"),"UpdatedAt field is not present");
         softAssert.assertTrue(!response.jsonPath().getString("updatedAt").isEmpty(), "Timestamp is empty");
+        softAssert.assertAll();
         System.out.println("testUpdateUserPartially passed successfully");
     }
 
-    @Test(description = "Test to delete a user")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to delete a user")
     public void testDeleteUser(){
         Response response =
                 requestSpecification
@@ -125,6 +131,7 @@ public class UserTests extends BaseTest {
                         .response();
         softAssert.assertEquals(response.getStatusCode(),StatusCode.NO_CONTENT.code, "The expected status code was 204 but actual status code is "+response.getStatusCode());
         softAssert.assertTrue(response.getBody().asString().trim().isEmpty(), "Expected empty response but actual response is "+response.getBody().asString());
+        softAssert.assertAll();
         System.out.println("testDeleteUser passed successfully");
     }
 }

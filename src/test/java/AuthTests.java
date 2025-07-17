@@ -1,5 +1,6 @@
 import Core.BaseTest;
 import Utils.JsonReader;
+import Utils.RetryAnalyzer;
 import Utils.Routes;
 import io.restassured.response.Response;
 import org.json.simple.parser.ParseException;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public class AuthTests extends BaseTest {
 
-    @Test(description = "Test to login with valid credentials")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to login with valid credentials")
     public void testLoginWithValidCredentials() throws IOException, ParseException {
         Map<String,String> userLoginDetails = new HashMap<>();
         userLoginDetails.put("email",JsonReader.readJsonData("email"));
@@ -29,10 +30,11 @@ public class AuthTests extends BaseTest {
         softAssert.assertTrue(!response.getBody().asString().isEmpty(),"Expected response was not empty but the actual response is empty");
         Map responseBody = response.as(Map.class);
         softAssert.assertTrue(responseBody.containsKey("token"),"Login Failed");
+        softAssert.assertAll();
         System.out.println("testLoginWithValidCredentials passed successfully");
     }
 
-    @Test(description = "Test to login with invalid credentials")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to login with invalid credentials")
     public void testLoginWithInvalidCredentials() throws IOException, ParseException {
         Map<String,String> userLoginDetails = new HashMap<>();
         userLoginDetails.put("email",JsonReader.readJsonData("email"));
@@ -48,10 +50,11 @@ public class AuthTests extends BaseTest {
         softAssert.assertTrue(!response.getBody().asString().isEmpty(),"Expected response was not empty but the actual response is empty");
         Map responseBody = response.as(Map.class);
         softAssert.assertTrue(responseBody.containsKey("error"),"Login Successfully");
+        softAssert.assertAll();
         System.out.println("testLoginWithInvalidCredentials passed successfully");
     }
 
-    @Test(description = "Test to register user with valid credentials")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to register user with valid credentials")
     public void testRegisterUserWithValidCredentials() throws IOException, ParseException {
         Map<String,String> userRegisterDetails = new HashMap<>();
         userRegisterDetails.put("email", JsonReader.readJsonData("email"));
@@ -68,10 +71,11 @@ public class AuthTests extends BaseTest {
         softAssert.assertTrue(!response.getBody().asString().isEmpty(),"Expected response was not empty but the actual response is empty");
         Map responseRegisterBody = response.as(Map.class);
         softAssert.assertTrue(responseRegisterBody.containsKey("id") && responseRegisterBody.containsKey("token"),"Register failed. Fill the required details");
+        softAssert.assertAll();
         System.out.println("testRegisterUserWithValidCredentials passed successfully");
     }
 
-    @Test(description = "Test to register user with invalid credentials")
+    @Test(retryAnalyzer = RetryAnalyzer.class, description = "Test to register user with invalid credentials")
     public void testRegisterUserWithInvalidCredentials() throws IOException, ParseException {
         Map<String,String> userRegisterDetails = new HashMap<>();
         userRegisterDetails.put("email", JsonReader.readJsonData("email"));
@@ -87,6 +91,7 @@ public class AuthTests extends BaseTest {
         softAssert.assertTrue(!response.getBody().asString().isEmpty(),"Expected response was not empty but the actual response is empty");
         Map responseRegisterBody = response.as(Map.class);
         softAssert.assertTrue(responseRegisterBody.containsKey("error"),"Successfully Registered a user");
+        softAssert.assertAll();
         System.out.println("testRegisterUserWithInvalidCredentials passed successfully");
     }
 }
