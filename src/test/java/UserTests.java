@@ -1,6 +1,7 @@
 import Core.BaseTest;
 import Pojo.UserRequestData;
 import Pojo.UserResponseData;
+import Utils.DataProviders;
 import Utils.Routes;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -44,11 +45,11 @@ public class UserTests extends BaseTest {
         System.out.println("testGetSingleUser passed successfully");
     }
 
-    @Test(description = "Test to create a user")
-    public void testCreateUser(){
+    @Test(dataProvider = "createUserData", dataProviderClass = DataProviders.class, description = "Test to create a user")
+    public void testCreateUser(String name, String job){
         UserRequestData user = new UserRequestData();
-        user.setName("morpheus");
-        user.setJob("leader");
+        user.setName(name);
+        user.setJob(job);
         Response response=
                 requestSpecification
                         .body(user)
@@ -61,7 +62,8 @@ public class UserTests extends BaseTest {
         softAssert.assertEquals(response.getStatusCode(),StatusCode.CREATED.code,"The expected status code was 201 but actual status code is "+response.getStatusCode());
         softAssert.assertEquals(response.jsonPath().getString("name"),userResponseBody.getName(),"Name mismatched between expected and actual response");
         softAssert.assertEquals(response.jsonPath().getString("job"),userResponseBody.getJob(),"Job mismatched between expected and actual response");
-        System.out.println("testCreateUser passed successfully");
+        System.out.println("testCreateUser passed successfully and User details are Name: "+name+" | Job: "+job);
+
     }
 
     @Test(description = "Test to update a user")
