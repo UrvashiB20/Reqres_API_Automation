@@ -4,6 +4,7 @@
 
     <listeners>
         <listener class-name="Utils.ExtentReportListener"> </listener>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"> </listener>
     </listeners>
 
     <test name="API Tests">

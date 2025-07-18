@@ -4,7 +4,10 @@ import com.aventstack.extentreports.ExtentTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.qameta.allure.Allure;
 import io.restassured.response.Response;
+
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +31,7 @@ public class LoggingUtil {
 
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(logMap);
         test.info("<pre>"+json+"</pre>");
+        Allure.addAttachment("Request Details:","application/json",new ByteArrayInputStream(json.getBytes()),".json");
     }
 
     public static void logResponse(ExtentTest test, Response response) throws JsonProcessingException {
@@ -50,5 +54,6 @@ public class LoggingUtil {
 
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(logMap);
         test.info("<pre>"+json+"</pre>");
+        Allure.addAttachment("Response Details:","application/json",new ByteArrayInputStream(json.getBytes()),".json");
     }
 }
