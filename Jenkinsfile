@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     tools {
-        maven 'Apache Maven'
-        jdk 'JDK'
+        maven 'Maven3'
+        jdk 'JDK21'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/UrvashiB20/Reqres_API_Automation.git'
+                git 'https://github.com/UrvashiB20/Reqres_API_Automation.git'
             }
         }
 
@@ -30,25 +30,16 @@ pipeline {
                 bat 'allure generate target/allure-results --clean -o target/allure-report'
             }
         }
-
-        post {
-            always {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'target/allure-results']]
-                ])
-            }
-        }
     }
 
     post {
         always {
-            echo 'Pipeline finished'
-        }
-        failure {
-            echo 'Pipeline failed!'
+            allure([
+                includeProperties: false,
+                jdk: '',
+                reportBuildPolicy: 'ALWAYS',
+                results: [[path: 'target/allure-results']]
+            ])
         }
     }
 }
