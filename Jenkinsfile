@@ -24,12 +24,6 @@ pipeline {
                 bat 'mvn test'
             }
         }
-
-        stage('Generate Allure Report') {
-            steps {
-                bat 'allure generate target/allure-results --clean -o target/allure-report'
-            }
-        }
     }
 
     post {
