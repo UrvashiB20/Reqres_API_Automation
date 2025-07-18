@@ -27,16 +27,7 @@ pipeline {
 
         stage('Generate Allure Report') {
             steps {
-                bat 'mvn target/allure-results'
-            }
-        }
-
-        stage('Allure Report') {
-            steps {
-                allure ([
-                    results: [[path:'target/allure-results']],
-                    reportBuildPolicy: 'ALWAYS'
-                ])
+                bat 'allure generate target/allure-results --clean -o target/allure-report'
             }
         }
     }
