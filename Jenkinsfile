@@ -30,6 +30,17 @@ pipeline {
                 bat 'allure generate target/allure-results --clean -o target/allure-report'
             }
         }
+
+        post {
+            always {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'target/allure-results']]
+                ])
+            }
+        }
     }
 
     post {
